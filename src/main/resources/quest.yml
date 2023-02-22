@@ -1,0 +1,41 @@
+static:
+  title: "Candy bar hunt"
+  intro: "Enter the code found on your sweet to receive a clue to the next one <i>🍫🍰🍨</i>"
+  outro: "Congrats, all sweets have been found! 🎉"
+  # The "ᴏ" symbol bellow is used instead of the letter "o" to confuse password managers as
+  # they can add redundant autofill icons next to input fields containing the work "code".
+  inputPlaceholder: "cᴏde"
+  submitButtonText: "check"
+  codeIsCorrectMessage: "Yey, that was correct 🥳"
+  codeIsWrongMessage: "Nope, try again 😋"
+  questItems:
+    - id: 1
+      hint: "N/A. Leave the sweet with the first code/link in a visible place or just give it to the participant(s)"
+      code: "code1"
+    - id: 2
+      hint: "The sweet is guarded by a vicious beast. Locate its lair"
+      code: "code2"
+    - id: 3
+      hint: "A faint ray of light will guide you through the darkest night"
+      code: "code3"
+    - id: 4
+      hint: "In the coldest corner of the world,<br>you will find something that will warm your heart"
+      code: "code4"
+    - id: 5
+      hint: "Hint No 5"
+      code: "code5"
+    - id: 6
+      hint: "Hint No 6"
+      code: "code6"
+    - id: 7
+      hint: "Hint No 7"
+      code: "code7"
+    - id: 8
+      hint: "Hint No 8"
+      code: "code8"
+    - id: 9
+      hint: "Hint No 9"
+      code: "code9"
+    - id: 10
+      hint: "Hint No 10"
+      code: "code10"

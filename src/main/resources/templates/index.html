@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:utext="${info.getTitle()}">Scavenger Hunt</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <th:block th:fragment="progress-indicator">
+        <div id="progress-container">
+            <div id="progress-indicator"></div>
+            <div id="progress-text"></div>
+        </div>
+    </th:block>
+    <div id="content-container">
+        <div>
+            <h4 th:utext="${info.getTitle()}"></h4>
+            <h6 th:fragment="message" id="message" th:utext="${message}"></h6>
+            <form id="answer-container" class="col s12" autocomplete="off" onsubmit="validateCode(); return false;">
+                <div style="text-align: center; margin-top: 40px;">
+                    <input th:placeholder="${info.getInputPlaceholder()}" id="answer" type="text" spellcheck="false">
+                </div>
+                <a class="button" onclick="validateCode()" th:text="${info.getSubmitButtonText()}">check</a>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
