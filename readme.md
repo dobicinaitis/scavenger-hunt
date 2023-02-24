@@ -14,9 +14,9 @@ Codes can be entered manually in the UI or using links, e.g. `https://find.me/{c
 
 ### Screenshots
 
-![UI screenshot](doc/ui-example-1.png)
+![UI screenshot](doc/images/ui-example-1.png)
 
-![UI screenshot](doc/ui-example-2.png)
+![UI screenshot](doc/images/ui-example-2.png)
 
 ### Requirements
 
@@ -33,6 +33,7 @@ Codes can be entered manually in the UI or using links, e.g. `https://find.me/{c
 
 * [Build & Run](doc/build-and-run.md)
 * [API examples](doc/api-call-examples.md)
+* [Kubernetes setup](doc/kubernetes-setup.md)
 
 ### Library docs:
 

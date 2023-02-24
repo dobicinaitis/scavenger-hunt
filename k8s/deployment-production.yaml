@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: production-scavenger-hunt-deployment
+  namespace: scavenger-hunt
+  labels:
+    app: scavenger-hunt
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scavenger-hunt
+  template:
+    metadata:
+      labels:
+        environment: production
+        app: scavenger-hunt
+    spec:
+      containers:
+      - name: scavenger-hunt
+        image: registry.gitlab.com/dobicinaitis/scavenger-hunt:latest
+        imagePullPolicy: Always
+      imagePullSecrets:
+      - name: gitlab-registry
