@@ -1,0 +1,58 @@
+image: docker:stable
+
+services:
+  - docker:stable-dind
+
+variables:
+  DOCKER_DRIVER: overlay
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_TLS_CERTDIR: ""
+
+stages:
+  - build
+  - package
+  - deploy
+
+gradle-build:
+  stage: build
+  only:
+    - main
+  image: openjdk:17-jdk
+  script:
+    - ./gradlew build
+  artifacts:
+    paths:
+      - build/*
+      - k8s/*
+
+docker-build-production:
+  stage: package
+  environment: 
+    name: production
+    kubernetes:
+      namespace: scavenger-hunt
+  only:
+    - main
+  script:
+    - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" $CI_REGISTRY
+    - docker build -t "$CI_REGISTRY_IMAGE:latest" .
+    - docker push "$CI_REGISTRY_IMAGE:latest"
+
+deploy-production:
+  stage: deploy
+  environment: production
+  image:
+    name: bitnami/kubectl:latest
+    entrypoint: [ '' ]
+  only:
+    - main
+  script:
+    - kubectl config get-contexts
+    - kubectl config use-context dobicinaitis/scavenger-hunt:gitlab-agent
+    - |
+      if kubectl apply -f k8s/deployment-production.yaml | grep -q unchanged; then
+          echo "=> Patching deployment to force image update."
+          kubectl patch -f k8s/deployment-production.yaml -p "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"ci-last-updated\":\"$(date +'%s')\"}}}}}"
+      else
+          echo "=> Deployment apply has changed the object, no need to force image update."
+      fi
