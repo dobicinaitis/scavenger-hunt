@@ -1,10 +1,10 @@
-image: docker:stable
+image: jdrouet/docker-with-buildx:stable
 
 services:
   - docker:stable-dind
 
 variables:
-  DOCKER_DRIVER: overlay
+  DOCKER_DRIVER: overlay2
   DOCKER_HOST: tcp://docker:2375
   DOCKER_TLS_CERTDIR: ""
 
@@ -35,8 +35,8 @@ docker-build-production:
     - main
   script:
     - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" $CI_REGISTRY
-    - docker build -t "$CI_REGISTRY_IMAGE:latest" .
-    - docker push "$CI_REGISTRY_IMAGE:latest"
+    - docker buildx create --use
+    - docker buildx build --push --platform linux/amd64,linux/arm64/v8 -t "$CI_REGISTRY_IMAGE:latest" .
 
 deploy-production:
   stage: deploy

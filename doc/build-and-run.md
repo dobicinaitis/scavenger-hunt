@@ -22,7 +22,8 @@ java -jar build/libs/scavenger-hunt-*.jar
 ./gradlew clean build
 docker build -t scavenger-hunt:latest .
 
-# docker build -t registry.gitlab.com/dobicinaitis/scavenger-hunt:latest .
+# docker buildx create --name builder --use
+# docker buildx build --platform linux/amd64,linux/arm64/v8 -t registry.gitlab.com/dobicinaitis/scavenger-hunt:latest .
 # docker push registry.gitlab.com/dobicinaitis/scavenger-hunt:latest
 ```
 
