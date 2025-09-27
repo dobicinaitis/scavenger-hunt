@@ -1,5 +1,10 @@
-FROM openjdk:17-slim
-RUN mkdir -p /app;
-COPY docker-entrypoint.sh /app/run.sh
-COPY build/libs/scavenger-hunt-*.jar /app/app.jar
-ENTRYPOINT /app/run.sh
+FROM gradle:9.1.0-jdk24-ubi-minimal AS builder
+WORKDIR /source
+COPY . .
+RUN gradle clean build --no-daemon
+
+FROM openjdk:25-slim
+WORKDIR /app
+COPY --from=builder /source/build/libs/scavenger-hunt-*.jar app.jar
+ENTRYPOINT ["java", "-jar", "app.jar"]
+CMD []

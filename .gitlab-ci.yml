@@ -1,58 +1,62 @@
-image: jdrouet/docker-with-buildx:stable
-
-services:
-  - docker:stable-dind
-
-variables:
-  DOCKER_DRIVER: overlay2
-  DOCKER_HOST: tcp://docker:2375
-  DOCKER_TLS_CERTDIR: ""
+workflow:
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: always
+    - when: never
 
 stages:
-  - build
   - package
+  - release
   - deploy
 
-gradle-build:
-  stage: build
-  only:
-    - main
-  image: openjdk:17-jdk
-  script:
-    - ./gradlew build
-  artifacts:
-    paths:
-      - build/*
-      - k8s/*
+include:
+  - component: $CI_SERVER_FQDN/dobicinaitis/pipeline-components/kubernetes-release@main
+    rules:
+      - if: $CI_COMMIT_TAG
 
-docker-build-production:
-  stage: package
-  environment: 
-    name: production
-    kubernetes:
-      namespace: scavenger-hunt
-  only:
-    - main
-  script:
-    - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" $CI_REGISTRY
-    - docker buildx create --use
-    - docker buildx build --push --platform linux/amd64,linux/arm64/v8 -t "$CI_REGISTRY_IMAGE:latest" .
-
-deploy-production:
+"Deploy":
   stage: deploy
-  environment: production
-  image:
-    name: bitnami/kubectl:latest
-    entrypoint: [ '' ]
-  only:
-    - main
-  script:
-    - kubectl config get-contexts
-    - kubectl config use-context dobicinaitis/scavenger-hunt:gitlab-agent
+  rules:
+    - if: $CI_COMMIT_TAG
+  image: registry.gitlab.com/dobicinaitis/helm-tools:latest
+  variables:
+    # app
+    VERSION: $CI_COMMIT_TAG
+    # chart
+    NAMESNAPCE: $CI_PROJECT_NAME
+    DEPLOYMENT_NAME: $CI_PROJECT_NAME
+    REGISTRY_URL: $CI_REGISTRY_IMAGE
+    REGISTRY_USER: $CI_DEPLOY_USER
+    REGISTRY_PASSWORD: $CI_DEPLOY_PASSWORD
+    # k8s
+    KUBE_CONTEXT: "dobicinaitis/skypiea-gitlab-agent:gitlab-agent"
+  before_script:
     - |
-      if kubectl apply -f k8s/deployment-production.yaml | grep -q unchanged; then
-          echo "=> Patching deployment to force image update."
-          kubectl patch -f k8s/deployment-production.yaml -p "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"ci-last-updated\":\"$(date +'%s')\"}}}}}"
-      else
-          echo "=> Deployment apply has changed the object, no need to force image update."
+      STRIPPED_VERSION=$(echo "$VERSION" | sed -E 's/^v([0-9]+\.[0-9]+\.[0-9]+.*)$/\1/')
+      if [[ "$VERSION" != "$STRIPPED_VERSION" ]]; then
+          echo "Stripped 'v' prefix from version '$VERSION'. New value '$STRIPPED_VERSION'."
+          VERSION=$STRIPPED_VERSION
       fi
+    - helm registry login -u $REGISTRY_USER -p "$REGISTRY_PASSWORD" $REGISTRY_URL
+  script:
+    - echo "🚀 Deploying application version $VERSION to Kubernetes ..."
+    - |
+      helm upgrade --install $DEPLOYMENT_NAME \
+          --namespace $NAMESNAPCE \
+          --create-namespace \
+          --set ingress.enabled=true \
+          --set ingress.className=nginx \
+          --set ingress.hosts[0].host=mekle.nu \
+          --set ingress.hosts[0].paths[0].path=/ \
+          --set ingress.hosts[0].paths[0].pathType=Prefix \
+          --set ingress.tls[0].hosts[0]=mekle.nu \
+          --set imagePullSecrets[0].name=gitlab-registry-secret \
+          --set imagePullSecrets[0].registry=$REGISTRY_URL \
+          --set imagePullSecrets[0].username=$REGISTRY_USER \
+          --set imagePullSecrets[0].password="$REGISTRY_PASSWORD" \
+          --set imagePullSecrets[0].email="dummy-email@example.com" \
+          --atomic \
+          --hide-notes \
+          --kube-context $KUBE_CONTEXT \
+          --kubeconfig $KUBECONFIG \
+          oci://$CI_REGISTRY_IMAGE/charts/$CI_PROJECT_NAME --version $VERSION

@@ -1,4 +1,0 @@
-ci_access:
-  projects:
-    - id: dobicinaitis/scavenger-hunt
-      default-namespace: scavenger-hunt

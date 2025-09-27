@@ -20,7 +20,7 @@ Codes can be entered manually in the UI or using links, e.g. `https://find.me/{c
 
 ### Requirements
 
-* Java 17 or later
+* Java 24 or later
 
 ### Setup
 
@@ -33,8 +33,6 @@ Codes can be entered manually in the UI or using links, e.g. `https://find.me/{c
 
 * [Build & Run](doc/build-and-run.md)
 * [API examples](doc/api-call-examples.md)
-* [Kubernetes setup](doc/kubernetes-setup.md)
-* [GitLab CI/CD setup](doc/gitlab-setup.md)
 
 ### Library docs:
 
