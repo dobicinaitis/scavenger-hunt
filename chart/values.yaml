@@ -88,6 +88,14 @@ resources: {}
 #   cpu: 100m
 #   memory: 128Mi
 
+certificate:
+  enabled: true
+  issuer:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+    - example.com
+
 # This is to setup the liveness and readiness probes more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
 livenessProbe:
   httpGet:
