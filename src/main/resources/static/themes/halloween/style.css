@@ -1,0 +1,54 @@
+:root {
+    --accent: #d54f1a;
+    --accent-light: #de754c;
+    --accent-dark: #bd4b1f;
+    --background-color: #221e22;
+    --text-color: #fffcf2;
+}
+
+@font-face {
+    font-family: 'shlop';
+    src: url('fonts/shlop/shlop.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+#title {
+    font-family: 'shlop', cursive;
+    font-size: 4rem;
+    color: var(--text-color);
+    opacity: 0.8;
+    letter-spacing: 1rem;
+    text-shadow: 0 0 6px var(--text-color),
+    0 0 12px var(--accent-light),
+    0 0 24px var(--accent-dark);
+}
+
+.button {
+    opacity: 1;
+    box-shadow: 0 0 10px 2px var(--accent);
+    animation: pulsate-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes pulsate-glow {
+    0% {
+        box-shadow: 0 0 10px 2px var(--accent);
+        opacity: 0.9;
+    }
+    100% {
+        box-shadow: 0 0 20px 4px var(--accent);
+        opacity: 1;
+    }
+}
+
+.button:hover {
+    background-color: var(--accent-light) !important;
+}
+
+.button:after {
+    box-shadow: 0 0 10px 20px var(--accent);
+}
+
+.button:active:after {
+    box-shadow: 0 0 0 0 var(--accent);
+}

@@ -15,6 +15,8 @@ public class HtmlPageController {
 
     @GetMapping(value = {"/", "/index"})
     public String index(Model model) {
+        final String themeLayoutPath = "themes/" + service.getInfo().getTheme().getName() + "/layout";
+        model.addAttribute("theme", themeLayoutPath);
         model.addAttribute("info", service.getInfo());
         model.addAttribute("message", service.getInfo().getIntro());
         return "index";

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <th:block th:replace="~{fragments/page-commons :: head}"></th:block>
+    <link rel="stylesheet" type="text/css" th:href="@{/themes/halloween/style.css}"/>
+    <style th:replace="~{themes/halloween/floating-ghosts :: ghosts-css}" rel="stylesheet"></style>
+</head>
+<body>
+<div layout:fragment="content">
+    <p>Page content will go here</p>
+</div>
+<div th:replace="~{themes/halloween/floating-ghosts :: ghosts-content}"></div>
+<th:block th:replace="~{fragments/page-commons :: body-trailing-scripts}"></th:block>
+<script type="text/javascript" th:replace="~{themes/halloween/floating-ghosts :: ghosts-js}"></script>
+</body>
+</html>

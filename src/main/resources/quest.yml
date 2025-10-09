@@ -1,5 +1,6 @@
 static:
   title: "Candy bar hunt"
+  theme: "default" # available options: "default", "halloween"
   intro: "Enter the code found on your sweet to receive a clue to the next one <i>🍫🍰🍨</i>"
   outro: "Congrats, all sweets have been found! 🎉"
   # The "ᴏ" symbol bellow is used instead of the letter "o" to confuse password managers as

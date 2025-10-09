@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <th:block th:replace="~{fragments/page-commons :: head}"></th:block>
+    <style th:replace="~{themes/default/floating-squares :: css}" rel="stylesheet"></style>
+</head>
+<body>
+<div layout:fragment="content">
+    <p>Page content will go here</p>
+</div>
+<div th:replace="~{themes/default/floating-squares :: content}"></div>
+<th:block th:replace="~{fragments/page-commons :: body-trailing-scripts}"></th:block>
+</body>
+</html>

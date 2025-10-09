@@ -1,6 +1,7 @@
 package dev.dobicinaitis.scavengerhunt.config;
 
 import dev.dobicinaitis.scavengerhunt.dto.QuestItem;
+import dev.dobicinaitis.scavengerhunt.dto.Theme;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,7 @@ import java.util.List;
 @Data
 public class QuestConfiguration {
     private String title;
+    private Theme theme;
     private String intro;
     private String outro;
     private String inputPlaceholder;

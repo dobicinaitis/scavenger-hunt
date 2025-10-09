@@ -7,6 +7,7 @@ import lombok.Data;
 @Builder
 public class QuestInfo {
     private String title;
+    private Theme theme;
     private String intro;
     private String inputPlaceholder;
     private String submitButtonText;

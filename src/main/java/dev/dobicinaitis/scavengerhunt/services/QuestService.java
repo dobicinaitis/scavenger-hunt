@@ -30,6 +30,7 @@ public class QuestService {
     public QuestInfo getInfo() {
         return QuestInfo.builder()
                 .title(quest.getTitle())
+                .theme(quest.getTheme())
                 .intro(quest.getIntro())
                 .inputPlaceholder(quest.getInputPlaceholder())
                 .submitButtonText(quest.getSubmitButtonText())
@@ -109,7 +110,7 @@ public class QuestService {
         final RandomStringGenerator generator = new RandomStringGenerator.Builder()
                 .withinRange('0', 'z')
                 .filteredBy(CharacterPredicates.LETTERS, CharacterPredicates.DIGITS)
-                .build();
+                .get();
         final StringBuilder codes = new StringBuilder();
         for (int i = 0; i < count; i++) {
             final String code = generator.generate(length).toUpperCase();
