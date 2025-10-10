@@ -18,14 +18,26 @@ Codes can be entered manually in the UI or using links, e.g. `https://find.me/{c
 
 ![UI screenshot](doc/images/ui-example-2.png)
 
-### Requirements
+### Quickstart
 
-* Java 24 or later
+Use the prebuilt container image:
 
-### Setup
+```bash
+docker run --rm -p 8080:8080 registry.gitlab.com/dobicinaitis/scavenger-hunt
+```
 
+Supply your own [quest.yml](src/main/resources/quest.yml) configuration file by mounting it into the container:
+
+```bash
+docker run --rm -p 8080:8080 
+  -v ./quest.yml:/app/config/quest.yml \
+  registry.gitlab.com/dobicinaitis/scavenger-hunt
+```
+
+### Local setup
+
+* Install Java 24 or later
 * Clone this repository
-* Define hints to items, codes, etc. in [quest.yml](src/main/resources/quest.yml)
 * Run the app `./gradlew bootRun`
 * Check out the page at http://localhost:8080
 
