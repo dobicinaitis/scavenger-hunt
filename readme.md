@@ -14,9 +14,15 @@ Codes can be entered manually in the UI or using links, e.g. `https://find.me/{c
 
 ### Screenshots
 
+#### Default theme
+
 ![UI screenshot](doc/images/ui-example-1.png)
 
 ![UI screenshot](doc/images/ui-example-2.png)
+
+#### Halloween theme
+
+![UI screenshot](doc/images/ui-example-3.png)
 
 ### Quickstart
 
