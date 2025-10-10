@@ -2,10 +2,27 @@ plugins {
     java
     id("org.springframework.boot") version "3.5.6"
     id("io.spring.dependency-management") version "1.1.7"
+    id("me.qoomon.git-versioning") version "6.4.4"
 }
 
 group = "dev.dobicinaitis"
-version = "0.2.0"
+version = "0.0.0"
+gitVersioning.apply {
+    refs {
+        considerTagsOnBranches = true
+        tag("v(?<version>.*)") {
+            version = "\${ref.version}"
+        }
+        branch(".+") {
+            version = "\${describe.tag.version}-SNAPSHOT"
+        }
+    }
+
+    // fallback configuration in case of no matching ref configuration
+    rev {
+        version = "\${version}-SNAPSHOT"
+    }
+}
 
 java {
     toolchain {
