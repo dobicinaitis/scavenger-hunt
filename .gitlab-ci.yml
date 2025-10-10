@@ -42,6 +42,11 @@ include:
   script:
     - echo "🚀 Deploying application version $VERSION to Kubernetes ..."
     - |
+      # create or update the quest configuration ConfigMap
+      echo $QUEST_CONFIG_BASE64 | base64 -d > quest.yml
+      kubectl -n $NAMESPACE create configmap quest-config --from-file=quest.yml \
+          --dry-run=client -o yaml | kubectl apply -f -
+    - |
       helm upgrade --install $DEPLOYMENT_NAME \
           --namespace $NAMESNAPCE \
           --create-namespace \
@@ -57,6 +62,10 @@ include:
           --set imagePullSecrets[0].username=$REGISTRY_USER \
           --set imagePullSecrets[0].password="$REGISTRY_PASSWORD" \
           --set imagePullSecrets[0].email="dummy-email@example.com" \
+          --set volumes[0].name=quest-config \
+          --set volumes[0].configMap.name=quest-config \
+          --set volumeMounts[0].name=quest-config \
+          --set volumeMounts[0].mountPath=app/config/ \
           --set certificate.enabled=true \
           --set certificate.dnsNames[0]=$APP_HOST \
           --atomic \
