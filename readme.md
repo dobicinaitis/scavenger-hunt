@@ -35,7 +35,7 @@ docker run --rm -p 8080:8080 registry.gitlab.com/dobicinaitis/scavenger-hunt
 Supply your own [quest.yml](src/main/resources/quest.yml) configuration file by mounting it into the container:
 
 ```bash
-docker run --rm -p 8080:8080 
+docker run --rm -p 8080:8080 \
   -v ./quest.yml:/app/config/quest.yml \
   registry.gitlab.com/dobicinaitis/scavenger-hunt
 ```
