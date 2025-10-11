@@ -40,14 +40,24 @@ docker run -it --rm  -p 8080:80 registry.gitlab.com/dobicinaitis/scavenger-hunt
 docker tag scavenger-hunt:local localhost:32000/scavenger-hunt:local
 docker push localhost:32000/scavenger-hunt:local
 
+# create a config map from your local quest.yml file
+kubectl create configmap quest-config --from-file=./config/quest.yml \
+    --dry-run=client -o yaml | kubectl apply -f -
+
 # deploy using Helm
 helm upgrade --install scavenger-hunt chart \
     --set image.repository=localhost:32000/scavenger-hunt \
     --set image.tag=local \
-    --set ingress.enabled=true
+    --set ingress.enabled=true \
+    --set volumes[0].name=quest-config \
+    --set volumes[0].configMap.name=quest-config \
+    --set volumeMounts[0].name=quest-config \
+    --set volumeMounts[0].mountPath=/app/config/quest.yml \
+    --set volumeMounts[0].subPath=quest.yml \
 
 # uninstall
 helm uninstall scavenger-hunt
+kubectl delete configmaps quest-config
 ```
 
 Head over to http://scavenger-hunt.localhost to access the web interface.
@@ -63,14 +73,23 @@ helm registry login -u <gitlab-username> -p "<access-token>" registry.gitlab.com
 **Deploy**
 
 ```bash
+# create a config map from your local quest.yml file
+kubectl create configmap quest-config --from-file=./config/quest.yml \
+    --dry-run=client -o yaml | kubectl apply -f -
+
+# deploy using Helm
 helm upgrade --install scavenger-hunt \
     --set ingress.enabled=true \
-    --set imagePullSecrets[0].name=gitlab-registry-secret \
-    --set imagePullSecrets[0].registry=registry.gitlab.com \
-    --set imagePullSecrets[0].username=<username> \
-    --set imagePullSecrets[0].password=<password> \
-    --set imagePullSecrets[0].email=<email> \
+    --set volumes[0].name=quest-config \
+    --set volumes[0].configMap.name=quest-config \
+    --set volumeMounts[0].name=quest-config \
+    --set volumeMounts[0].mountPath=/app/config/quest.yml \
+    --set volumeMounts[0].subPath=quest.yml \
     oci://registry.gitlab.com/dobicinaitis/scavenger-hunt/charts/scavenger-hunt --version <version>
+    
+# uninstall
+helm uninstall scavenger-hunt
+kubectl delete configmaps quest-config
 ```
 
 Head over to http://scavenger-hunt.localhost to access the web interface.

@@ -89,7 +89,7 @@ resources: {}
 #   memory: 128Mi
 
 certificate:
-  enabled: true
+  enabled: false
   issuer:
     name: letsencrypt-prod
     kind: ClusterIssuer
