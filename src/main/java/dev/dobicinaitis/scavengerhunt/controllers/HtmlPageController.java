@@ -24,6 +24,8 @@ public class HtmlPageController {
 
     @GetMapping(value = {"/{code}"})
     public String index(@PathVariable String code, Model model) {
+        final String themeLayoutPath = "themes/" + service.getInfo().getTheme().getName() + "/layout";
+        model.addAttribute("theme", themeLayoutPath);
         model.addAttribute("info", service.getInfo());
         model.addAttribute("message", service.getInfo().getIntro());
         model.addAttribute("code", code);
